@@ -1,0 +1,122 @@
+{
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
+    "hero": {
+      "type": "slideshow",
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "heading": "Welcome to Fashion Theme 2025",
+            "heading_size": "h1",
+            "subheading": "Discover the latest trends",
+            "button_label": "Shop Now",
+            "button_link": "/collections/all",
+            "button_style_secondary": false,
+            "text_alignment": "center",
+            "image_overlay_opacity": 30,
+            "color_scheme": "inverse"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "heading": "New Collection",
+            "heading_size": "h1",
+            "subheading": "Premium quality, modern design",
+            "button_label": "Explore",
+            "button_link": "/collections",
+            "button_style_secondary": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 40,
+            "color_scheme": "inverse"
+          }
+        }
+      },
+      "block_order": [
+        "slide-1",
+        "slide-2"
+      ],
+      "settings": {
+        "layout": "full_width",
+        "slide_height": "large",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Products",
+        "collection": "",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "swipe_on_mobile": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "show_secondary_image": true
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_2": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2",
+        "collection_3"
+      ],
+      "settings": {
+        "title": "Shop by Category",
+        "subtitle": "Browse our collections",
+        "columns_desktop": "3",
+        "columns_mobile": "1",
+        "show_description": false,
+        "show_product_count": true,
+        "show_view_all": true,
+        "show_overlay": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement",
+    "header",
+    "hero",
+    "featured_collection",
+    "collection_list",
+    "footer"
+  ]
+}

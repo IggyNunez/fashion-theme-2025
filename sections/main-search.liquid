@@ -1,0 +1,183 @@
+{{ 'section-main-search.css' | asset_url | stylesheet_tag }}
+
+{%- if search.performed -%}
+  {%- paginate search.results by section.settings.products_per_page -%}
+    <div class="search page-width">
+      <div class="search__header">
+        <h1 class="search__heading">
+          {%- if search.results_count == 0 -%}
+            {{ 'templates.search.no_results' | t: terms: search.terms }}
+          {%- else -%}
+            {{ 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+          {%- endif -%}
+        </h1>
+      </div>
+      
+      <div class="search__content">
+        {%- if search.results_count > 0 -%}
+          <ul class="search-results grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
+            {%- for item in search.results -%}
+              <li class="grid__item">
+                {%- case item.object_type -%}
+                  {%- when 'product' -%}
+                    {% render 'product-card',
+                      product: item,
+                      show_vendor: section.settings.show_vendor,
+                      show_rating: section.settings.show_rating,
+                      show_secondary_image: section.settings.show_secondary_image
+                    %}
+                  {%- when 'article' -%}
+                    <div class="card-wrapper">
+                      <div class="card card--article">
+                        <a href="{{ item.url }}" class="full-link">
+                          {%- if item.image -%}
+                            <div class="card__media">
+                              {{ item.image | image_url: width: 500 | image_tag:
+                                widths: '165, 360, 535, 750',
+                                loading: 'lazy',
+                                alt: item.image.alt | escape
+                              }}
+                            </div>
+                          {%- endif -%}
+                          <div class="card__content">
+                            <h3 class="card__heading">{{ item.title | truncate: 50 | escape }}</h3>
+                            <p class="card__caption">{{ item.content | strip_html | truncate: 150 }}</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  {%- when 'page' -%}
+                    <div class="card-wrapper">
+                      <div class="card card--page">
+                        <a href="{{ item.url }}" class="full-link">
+                          <div class="card__content">
+                            <h3 class="card__heading">{{ item.title | truncate: 50 | escape }}</h3>
+                            <p class="card__caption">{{ item.content | strip_html | truncate: 150 }}</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                {%- endcase -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        {%- else -%}
+          <div class="search__empty">
+            <p>{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="button">
+              {{ 'general.continue_shopping' | t }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endpaginate -%}
+{%- else -%}
+  <div class="search page-width">
+    <div class="search__header">
+      <h1 class="search__heading">{{ 'templates.search.title' | t }}</h1>
+    </div>
+    <div class="search__content">
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <div class="field">
+          <input
+            class="search__input field__input"
+            id="Search"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'templates.search.placeholder' | t }}"
+          >
+          <label class="field__label" for="Search">{{ 'templates.search.placeholder' | t }}</label>
+          <button type="submit" class="search__button field__button" aria-label="{{ 'templates.search.search' | t }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-search.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "label": "Products per page"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "4",
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2",
+      "label": "Columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "Show secondary image on hover"
+    }
+  ]
+}
+{% endschema %}

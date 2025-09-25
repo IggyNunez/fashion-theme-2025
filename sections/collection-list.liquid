@@ -1,0 +1,199 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+
+<div class="collection-list page-width section-{{ section.id }}-padding">
+  {%- if section.settings.title != blank -%}
+    <div class="section-header text-center">
+      <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="section-header__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="collection-list__wrapper">
+    <ul class="collection-list__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign collection = collections[block.settings.collection] -%}
+        <li class="collection-list__item grid__item" {{ block.shopify_attributes }}>
+          <div class="collection-card">
+            <a href="{{ collection.url }}" class="collection-card__link">
+              <div class="collection-card__image-wrapper">
+                {%- if collection.image != blank or collection.featured_image != blank -%}
+                  {%- assign collection_image = collection.image | default: collection.featured_image -%}
+                  {{ collection_image | image_url: width: 800 | image_tag:
+                    widths: '375, 550, 750, 1100, 1500',
+                    sizes: '(min-width: 1200px) calc((100vw - 10rem) / {{ section.settings.columns_desktop }}), (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)',
+                    loading: 'lazy',
+                    class: 'collection-card__image'
+                  }}
+                {%- elsif collection.products.first.featured_image -%}
+                  {{ collection.products.first.featured_image | image_url: width: 800 | image_tag:
+                    widths: '375, 550, 750, 1100, 1500',
+                    loading: 'lazy',
+                    class: 'collection-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg collection-card__image' }}
+                {%- endif -%}
+                
+                {%- if section.settings.show_overlay -%}
+                  <div class="collection-card__overlay"></div>
+                {%- endif -%}
+              </div>
+              
+              <div class="collection-card__content">
+                <h3 class="collection-card__title">
+                  {{ collection.title | default: block.settings.title | escape }}
+                </h3>
+                {%- if section.settings.show_description and collection.description != blank -%}
+                  <p class="collection-card__description">
+                    {{ collection.description | strip_html | truncate: 150 }}
+                  </p>
+                {%- endif -%}
+                {%- if section.settings.show_product_count -%}
+                  <p class="collection-card__count">
+                    {{ 'sections.collection_list.product_count' | t: count: collection.all_products_count }}
+                  </p>
+                {%- endif -%}
+                {%- if section.settings.show_view_all -%}
+                  <span class="collection-card__link-text">
+                    {{ 'sections.collection_list.view_all' | t }}
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.5 3L10.5 8L5.5 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+              </div>
+            </a>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.blocks.size == 0 -%}
+      <div class="collection-list__empty">
+        <p>{{ 'sections.collection_list.empty' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.collection-list.name",
+  "tag": "section",
+  "class": "section section-collection-list",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Collections",
+      "label": "t:sections.collection-list.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "2 columns"
+        },
+        {
+          "value": "3",
+          "label": "3 columns"
+        },
+        {
+          "value": "4",
+          "label": "4 columns"
+        },
+        {
+          "value": "5",
+          "label": "5 columns"
+        }
+      ],
+      "default": "3",
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1",
+      "label": "Number of columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Show collection description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "default": true,
+      "label": "Show product count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": false,
+      "label": "Show 'View all' link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "default": true,
+      "label": "Show image overlay"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Override collection title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collection-list.presets.name",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

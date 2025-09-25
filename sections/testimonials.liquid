@@ -1,0 +1,234 @@
+{{ 'section-testimonials.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'testimonials.js' | asset_url }}" defer="defer"></script>
+
+<div class="testimonials section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="section-header text-center">
+        {%- if section.settings.title != blank -%}
+          <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="section-header__subtitle">{{ section.settings.subtitle | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <testimonials-slider class="testimonials__wrapper" data-autoplay="{{ section.settings.auto_rotate }}" data-speed="{{ section.settings.change_slides_speed }}">
+      <div class="testimonials__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down">
+        {%- for block in section.blocks -%}
+          <div class="testimonial grid__item" {{ block.shopify_attributes }}>
+            <div class="testimonial__inner">
+              {%- if block.settings.show_rating and block.settings.rating > 0 -%}
+                <div class="testimonial__rating" aria-label="Rated {{ block.settings.rating }} out of 5 stars">
+                  {%- for i in (1..5) -%}
+                    <span class="star {% if i <= block.settings.rating %}filled{% endif %}">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 1L12.39 6.36L18 7.24L14 11.14L14.92 16.72L10 14L5.08 16.72L6 11.14L2 7.24L7.61 6.36L10 1Z"/>
+                      </svg>
+                    </span>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              
+              {%- if block.settings.testimonial != blank -%}
+                <blockquote class="testimonial__content">
+                  {{ block.settings.testimonial }}
+                </blockquote>
+              {%- endif -%}
+              
+              <div class="testimonial__author">
+                {%- if block.settings.author_image -%}
+                  <div class="testimonial__author-image">
+                    {{ block.settings.author_image | image_url: width: 100 | image_tag:
+                      widths: '50, 100',
+                      sizes: '50px',
+                      loading: 'lazy',
+                      alt: block.settings.author_name | escape
+                    }}
+                  </div>
+                {%- endif -%}
+                
+                <div class="testimonial__author-info">
+                  {%- if block.settings.author_name != blank -%}
+                    <cite class="testimonial__author-name">{{ block.settings.author_name | escape }}</cite>
+                  {%- endif -%}
+                  {%- if block.settings.author_title != blank -%}
+                    <p class="testimonial__author-title">{{ block.settings.author_title | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      
+      {%- if section.blocks.size > section.settings.columns_desktop and section.settings.enable_slider -%}
+        <div class="testimonials__controls">
+          <button type="button" class="testimonials__button testimonials__button--prev" aria-label="Previous testimonial">
+            <svg width="10" height="18" viewBox="0 0 10 18" fill="currentColor">
+              <path d="M8 2L2 9L8 16" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+          </button>
+          <div class="testimonials__dots">
+            {%- for block in section.blocks -%}
+              <button type="button" class="testimonials__dot {% if forloop.first %}active{% endif %}" aria-label="Go to testimonial {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="testimonials__button testimonials__button--next" aria-label="Next testimonial">
+            <svg width="10" height="18" viewBox="0 0 10 18" fill="currentColor">
+              <path d="M2 2L8 9L2 16" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </testimonials-slider>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section section-testimonials",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "What Our Customers Say",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        },
+        {
+          "value": "3",
+          "label": "3 columns"
+        },
+        {
+          "value": "4",
+          "label": "4 columns"
+        }
+      ],
+      "default": "3",
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1",
+      "label": "Columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "default": true,
+      "label": "Enable slider on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "default": false,
+      "label": "Auto-rotate testimonials"
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change testimonials every",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "testimonial",
+          "default": "<p>\"Add customer reviews and testimonials to showcase your store's happy customers.\"</p>",
+          "label": "Testimonial"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "default": "Author Name",
+          "label": "Author name"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "default": "Customer",
+          "label": "Author title/location"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "default": true,
+          "label": "Show rating"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Rating"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

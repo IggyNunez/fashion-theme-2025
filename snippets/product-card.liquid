@@ -1,0 +1,127 @@
+<div class="card-wrapper product-card-wrapper">
+  <div class="card card--product">
+    <div class="card__inner">
+      <div class="card__media">
+        {%- if product.featured_media -%}
+          <div class="media media--hover-effect">
+            <a href="{{ product.url }}" class="media__link">
+              {{ product.featured_media | image_url: width: 500 | image_tag:
+                widths: '165, 360, 535, 750, 1070',
+                sizes: '(min-width: 1200px) calc((100vw - 10rem) / 4), (min-width: 990px) calc((100vw - 10rem) / 3), (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)',
+                loading: 'lazy',
+                class: 'motion-reduce',
+                alt: product.featured_media.alt | escape
+              }}
+              
+              {%- if product.media[1] != nil and show_secondary_image -%}
+                {{ product.media[1] | image_url: width: 500 | image_tag:
+                  widths: '165, 360, 535, 750, 1070',
+                  sizes: '(min-width: 1200px) calc((100vw - 10rem) / 4), (min-width: 990px) calc((100vw - 10rem) / 3), (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)',
+                  loading: 'lazy',
+                  class: 'motion-reduce hover-image',
+                  alt: product.media[1].alt | escape
+                }}
+              {%- endif -%}
+            </a>
+          </div>
+        {%- else -%}
+          <div class="card__media">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+        
+        <div class="card__badge">
+          {%- if product.available == false -%}
+            <span class="badge badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+          {%- elsif product.compare_at_price > product.price -%}
+            <span class="badge badge--sale">{{ 'products.product.on_sale' | t }}</span>
+          {%- endif -%}
+        </div>
+        
+        {%- if show_quick_add -%}
+          <div class="quick-add">
+            {%- if product.has_only_default_variant -%}
+              <product-form>
+                {%- form 'product', product, id: 'QuickAdd-{{ product.id }}', class: 'form' -%}
+                  <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
+                  <button
+                    type="submit"
+                    name="add"
+                    class="quick-add__submit button button--full-width button--secondary"
+                    aria-label="Add {{ product.title | escape }} to cart"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+                    <span>
+                      {%- if product.available -%}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- endif -%}
+                    </span>
+                  </button>
+                {%- endform -%}
+              </product-form>
+            {%- else -%}
+              <a href="{{ product.url }}" class="quick-add__submit button button--full-width button--secondary">
+                {{ 'products.product.choose_options' | t }}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+      
+      <div class="card__content">
+        <div class="card__information">
+          {%- if show_vendor -%}
+            <span class="card__vendor">{{ product.vendor }}</span>
+          {%- endif -%}
+          
+          <h3 class="card__heading">
+            <a href="{{ product.url }}" class="full-link">
+              {{ product.title | escape }}
+            </a>
+          </h3>
+          
+          {%- if show_rating and product.metafields.reviews.rating.value != blank -%}
+            <div class="card__rating">
+              {%- assign rating = product.metafields.reviews.rating.value -%}
+              <div class="rating-stars" aria-label="Rated {{ rating }} out of 5">
+                {%- for i in (1..5) -%}
+                  <span class="star {% if i <= rating %}filled{% endif %}">★</span>
+                {%- endfor -%}
+              </div>
+              {%- if product.metafields.reviews.rating_count -%}
+                <span class="rating-count">({{ product.metafields.reviews.rating_count }})</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+        
+        <div class="card__price">
+          <div class="price">
+            <div class="price__container">
+              <div class="price__regular">
+                <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+                <span class="price-item price-item--regular">
+                  {{ product.price | money }}
+                </span>
+              </div>
+              {%- if product.compare_at_price > product.price -%}
+                <div class="price__sale">
+                  <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+                  <span class="price-item price-item--sale">
+                    {{ product.price | money }}
+                  </span>
+                  <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+                  <s class="price-item price-item--regular">
+                    {{ product.compare_at_price | money }}
+                  </s>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

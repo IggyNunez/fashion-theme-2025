@@ -1,0 +1,297 @@
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+  <div class="collection page-width">
+    <!-- Collection Header -->
+    <div class="collection-hero">
+      {%- if section.settings.show_collection_image and collection.image -%}
+        <div class="collection-hero__image">
+          {{ collection.image | image_url: width: 2000 | image_tag:
+            widths: '375, 750, 1100, 1500, 1780, 2000, 3000',
+            sizes: '100vw',
+            loading: 'eager'
+          }}
+          <div class="collection-hero__overlay"></div>
+        </div>
+      {%- endif -%}
+      
+      <div class="collection-hero__content">
+        <h1 class="collection-hero__title">{{ collection.title | escape }}</h1>
+        {%- if collection.description != blank and section.settings.show_collection_description -%}
+          <div class="collection-hero__description rte">{{ collection.description }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Product Count and Sorting -->
+    <div class="collection-header">
+      <div class="collection-header__left">
+        {%- if section.settings.enable_filtering -%}
+          <button type="button" class="button button--secondary" aria-controls="FilterDrawer" aria-expanded="false">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 7h12M7 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            {{ 'products.facets.filter_button' | t }}
+          </button>
+        {%- endif -%}
+        
+        <p class="collection-header__product-count">
+          {%- if collection.results_count -%}
+            {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
+          {%- elsif collection.products_count == collection.all_products_count -%}
+            {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+          {%- else -%}
+            {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+          {%- endif -%}
+        </p>
+      </div>
+
+      {%- if section.settings.enable_sorting -%}
+        <div class="collection-header__right">
+          <facet-filters-form class="facets">
+            <form id="FacetSortForm" class="facets__form">
+              <div class="facets__sort">
+                <label for="SortBy" class="visually-hidden">{{ 'products.facets.sort_by_label' | t }}</label>
+                <select name="sort_by" class="facets__sort-select" id="SortBy" aria-describedby="a11y-refresh-page-message">
+                  {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                  {%- for option in collection.sort_options -%}
+                    <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                      {{ option.name | escape }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </form>
+          </facet-filters-form>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Main Collection Content -->
+    <div class="collection-content">
+      <!-- Filters Sidebar -->
+      {%- if section.settings.enable_filtering -%}
+        <aside class="collection-filters" id="FilterDrawer">
+          <facet-filters-form class="facets">
+            <form id="FacetFiltersForm" class="facets__form">
+              
+              {%- for filter in collection.filters -%}
+                <details class="filter-group" id="Details-{{ forloop.index }}-{{ section.id }}">
+                  <summary class="filter-group__header">
+                    <span>{{ filter.label | escape }}</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                      <path d="M10 14L5 9l1.41-1.41L10 11.17l3.59-3.58L15 9z" fill="currentColor"/>
+                    </svg>
+                  </summary>
+                  
+                  <div class="filter-group__body">
+                    {%- case filter.type -%}
+                      {%- when 'list' -%}
+                        <ul class="filter-group__list" role="list">
+                          {%- for value in filter.values -%}
+                            <li class="filter-group__item">
+                              <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                <input type="checkbox"
+                                  name="{{ value.param_name }}"
+                                  value="{{ value.value }}"
+                                  id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                  {% if value.active %}checked{% endif %}
+                                  {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                >
+                                <span class="filter-group__label">
+                                  {{ value.label | escape }}
+                                  <span class="filter-group__count">({{ value.count }})</span>
+                                </span>
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                        
+                      {%- when 'price_range' -%}
+                        <price-range class="filter-group__price-range">
+                          <div class="filter-group__price-inputs">
+                            <div class="field">
+                              <label for="Filter-{{ filter.min_value.param_name }}">{{ 'products.facets.from' | t }}</label>
+                              <input type="number"
+                                name="{{ filter.min_value.param_name }}"
+                                id="Filter-{{ filter.min_value.param_name }}"
+                                {%- if filter.min_value.value -%}
+                                  value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                {%- endif -%}
+                                placeholder="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
+                                min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              >
+                            </div>
+                            <div class="field">
+                              <label for="Filter-{{ filter.max_value.param_name }}">{{ 'products.facets.to' | t }}</label>
+                              <input type="number"
+                                name="{{ filter.max_value.param_name }}"
+                                id="Filter-{{ filter.max_value.param_name }}"
+                                {%- if filter.max_value.value -%}
+                                  value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                {%- endif -%}
+                                placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              >
+                            </div>
+                          </div>
+                        </price-range>
+                    {%- endcase -%}
+                  </div>
+                </details>
+              {%- endfor -%}
+
+              <!-- Active Filters -->
+              {%- if collection.filters.size > 0 -%}
+                <div class="active-filters">
+                  <button type="button" class="active-filters__clear button button--tertiary">
+                    {{ 'products.facets.clear_all' | t }}
+                  </button>
+                </div>
+              {%- endif -%}
+            </form>
+          </facet-filters-form>
+        </aside>
+      {%- endif -%}
+
+      <!-- Products Grid -->
+      <div class="collection-products">
+        <ul id="product-grid" class="product-grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down">
+          {%- for product in collection.products -%}
+            <li class="grid__item">
+              {% render 'product-card',
+                product: product,
+                show_vendor: section.settings.show_vendor,
+                show_rating: section.settings.show_rating,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_quick_add: section.settings.show_quick_add
+              %}
+            </li>
+          {%- else -%}
+            <li class="collection-products__empty">
+              <p>{{ 'sections.collection_template.no_products' | t }}</p>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        <!-- Pagination -->
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "tag": "section",
+  "class": "section-main-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "4",
+      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2",
+      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": true,
+      "label": "Show collection image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": false,
+      "label": "Show collection description"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show product vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "default": false,
+      "label": "Enable quick add button"
+    }
+  ]
+}
+{% endschema %}
