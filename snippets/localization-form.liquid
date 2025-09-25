@@ -1,0 +1,118 @@
+<localization-form>
+  {%- form 'localization', id: form_id, class: 'localization-form' -%}
+    {%- if show_country -%}
+      <div class="localization-form__item">
+        <label for="Country-{{ form_id }}" class="visually-hidden">
+          {{ 'localization.country_label' | t }}
+        </label>
+        <div class="localization-form__select">
+          <select
+            id="Country-{{ form_id }}"
+            name="country_code"
+            class="localization-form__select-field"
+            aria-label="{{ 'localization.country_label' | t }}"
+          >
+            {%- for country in localization.available_countries -%}
+              <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+              </option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon', icon: 'chevron-down', class: 'localization-form__select-icon' %}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if show_language -%}
+      <div class="localization-form__item">
+        <label for="Language-{{ form_id }}" class="visually-hidden">
+          {{ 'localization.language_label' | t }}
+        </label>
+        <div class="localization-form__select">
+          <select
+            id="Language-{{ form_id }}"
+            name="locale_code"
+            class="localization-form__select-field"
+            aria-label="{{ 'localization.language_label' | t }}"
+          >
+            {%- for language in localization.available_languages -%}
+              <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                {{ language.endonym_name | capitalize }}
+              </option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon', icon: 'chevron-down', class: 'localization-form__select-icon' %}
+        </div>
+      </div>
+    {%- endif -%}
+    
+    <noscript>
+      <button class="button button--tertiary">{{ 'localization.update' | t }}</button>
+    </noscript>
+  {%- endform -%}
+</localization-form>
+
+<style>
+  .localization-form {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+  
+  .localization-form__item {
+    position: relative;
+  }
+  
+  .localization-form__select {
+    position: relative;
+  }
+  
+  .localization-form__select-field {
+    padding: var(--spacing-xs) var(--spacing-2xl) var(--spacing-xs) var(--spacing-sm);
+    background-color: transparent;
+    border: 1px solid currentColor;
+    border-radius: var(--border-radius-sm);
+    color: currentColor;
+    appearance: none;
+    min-width: 100px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  .localization-form__select-field:hover,
+  .localization-form__select-field:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  
+  .localization-form__select-icon {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 12px;
+    height: 12px;
+  }
+</style>
+
+<script>
+  class LocalizationForm extends HTMLElement {
+    constructor() {
+      super();
+      this.elements = {
+        form: this.querySelector('form'),
+        selects: this.querySelectorAll('select')
+      };
+      
+      this.elements.selects.forEach(select => {
+        select.addEventListener('change', this.onSelectChange.bind(this));
+      });
+    }
+    
+    onSelectChange() {
+      this.elements.form.submit();
+    }
+  }
+  
+  customElements.define('localization-form', LocalizationForm);
+</script>

@@ -1,0 +1,227 @@
+{%- unless product.has_only_default_variant -%}
+  <variant-picker class="variant-picker" data-section="{{ section_id }}" data-url="{{ product.url }}">
+    {%- for option in product.options_with_values -%}
+      <fieldset class="variant-picker__fieldset">
+        <legend class="variant-picker__label">
+          {{ option.name }}:
+          <span class="variant-picker__selected-value">{{ option.selected_value }}</span>
+        </legend>
+
+        {%- case settings.variant_picker_type -%}
+          {%- when 'dropdown' -%}
+            <div class="variant-picker__dropdown">
+              <select
+                name="options[{{ option.name | escape }}]"
+                class="variant-picker__select"
+                aria-label="{{ option.name }}"
+              >
+                {%- for value in option.values -%}
+                  <option 
+                    value="{{ value | escape }}"
+                    {% if value == option.selected_value %}selected{% endif %}
+                  >
+                    {{ value }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              {% render 'icon', icon: 'chevron-down', class: 'variant-picker__dropdown-icon' %}
+            </div>
+
+          {%- when 'buttons' -%}
+            <div class="variant-picker__buttons">
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign option_disabled = true
+                  for variant in product.variants
+                    if variant.options contains value
+                      assign option_disabled = false
+                      break
+                    endif
+                  endfor
+                -%}
+                
+                <input
+                  type="radio"
+                  id="{{ section_id }}-{{ option.position }}-{{ forloop.index0 }}"
+                  name="{{ option.name }}"
+                  value="{{ value | escape }}"
+                  {% if value == option.selected_value %}checked{% endif %}
+                  {% if option_disabled %}disabled{% endif %}
+                  class="variant-picker__radio"
+                >
+                <label 
+                  for="{{ section_id }}-{{ option.position }}-{{ forloop.index0 }}"
+                  class="variant-picker__button"
+                >
+                  {{ value }}
+                </label>
+              {%- endfor -%}
+            </div>
+
+          {%- when 'swatches' -%}
+            <div class="variant-picker__swatches">
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign option_disabled = true
+                  for variant in product.variants
+                    if variant.options contains value
+                      assign option_disabled = false
+                      break
+                    endif
+                  endfor
+                  
+                  assign swatch_color = value | handle | remove: '-'
+                  assign color_image = value | handle | append: '.png' | file_img_url: '50x50' 
+                -%}
+                
+                <input
+                  type="radio"
+                  id="{{ section_id }}-{{ option.position }}-{{ forloop.index0 }}"
+                  name="{{ option.name }}"
+                  value="{{ value | escape }}"
+                  {% if value == option.selected_value %}checked{% endif %}
+                  {% if option_disabled %}disabled{% endif %}
+                  class="variant-picker__radio"
+                >
+                
+                {%- if option.name contains 'Color' or option.name contains 'Colour' -%}
+                  <label 
+                    for="{{ section_id }}-{{ option.position }}-{{ forloop.index0 }}"
+                    class="variant-picker__swatch variant-picker__swatch--color"
+                    style="background-color: {{ swatch_color }}; {% if color_image %}background-image: url({{ color_image }});{% endif %}"
+                    title="{{ value }}"
+                  >
+                    <span class="visually-hidden">{{ value }}</span>
+                  </label>
+                {%- else -%}
+                  <label 
+                    for="{{ section_id }}-{{ option.position }}-{{ forloop.index0 }}"
+                    class="variant-picker__swatch"
+                    title="{{ value }}"
+                  >
+                    {{ value }}
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+        {%- endcase -%}
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json">
+      {{ product.variants | json }}
+    </script>
+  </variant-picker>
+{%- endunless -%}
+
+<style>
+  .variant-picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  .variant-picker__fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .variant-picker__label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .variant-picker__selected-value {
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-secondary);
+  }
+  
+  /* Dropdown Style */
+  .variant-picker__dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .variant-picker__select {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    padding-right: var(--spacing-2xl);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-background);
+    appearance: none;
+    cursor: pointer;
+  }
+  
+  .variant-picker__dropdown-icon {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Button Style */
+  .variant-picker__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .variant-picker__button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-background);
+    cursor: pointer;
+    transition: all var(--transition-base);
+  }
+  
+  .variant-picker__radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .variant-picker__radio:checked + .variant-picker__button,
+  .variant-picker__radio:checked + .variant-picker__swatch {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+  }
+  
+  .variant-picker__radio:disabled + .variant-picker__button,
+  .variant-picker__radio:disabled + .variant-picker__swatch {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Swatch Style */
+  .variant-picker__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .variant-picker__swatch {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .variant-picker__swatch--color {
+    border-radius: var(--border-radius-full);
+  }
+</style>

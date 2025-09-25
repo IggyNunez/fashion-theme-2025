@@ -1,0 +1,37 @@
+{%- liquid
+  assign loading_val = loading | default: 'lazy'
+  assign fetch_priority = fetch_priority | default: 'auto'
+  
+  if section.index <= 3 and loading_val == 'lazy'
+    assign loading_val = 'eager'
+    if section.index == 1
+      assign fetch_priority = 'high'
+    endif
+  endif
+  
+  assign widths = widths | default: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+  assign sizes_val = sizes | default: '100vw'
+-%}
+
+{%- if image != blank -%}
+  {%- capture image_tag -%}
+    {{ image | image_url: width: image.width | image_tag:
+      loading: loading_val,
+      fetchpriority: fetch_priority,
+      widths: widths,
+      sizes: sizes_val,
+      class: class,
+      alt: alt | default: image.alt | escape
+    }}
+  {%- endcapture -%}
+  
+  {%- if link != blank -%}
+    <a href="{{ link }}" class="{{ link_class }}">
+      {{ image_tag }}
+    </a>
+  {%- else -%}
+    {{ image_tag }}
+  {%- endif -%}
+{%- else -%}
+  {{ placeholder | default: 'image' | placeholder_svg_tag: class }}
+{%- endif -%}

@@ -1,0 +1,27 @@
+{%- if form.posted_successfully? -%}
+  <div class="form-message form-message--success" role="status" tabindex="-1" autofocus>
+    {% render 'icon', icon: 'check' %}
+    <span>{{ success_message | default: 'Thank you for your submission!' }}</span>
+  </div>
+{%- endif -%}
+
+{%- if form.errors -%}
+  <div class="form-message form-message--error" role="alert">
+    {% render 'icon', icon: 'error' %}
+    <div class="form-message__content">
+      <span class="form-message__title">{{ 'templates.contact.form.error_heading' | t }}</span>
+      <ul class="form-message__list">
+        {%- for field in form.errors -%}
+          <li>
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- else -%}
+              <strong>{{ form.errors.translated_fields[field] | capitalize }}</strong>
+              {{ form.errors.messages[field] }}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}

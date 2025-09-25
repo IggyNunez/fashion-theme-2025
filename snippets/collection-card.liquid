@@ -1,0 +1,128 @@
+<div class="collection-card">
+  <a href="{{ collection.url }}" class="collection-card__link">
+    <div class="collection-card__media">
+      {%- if collection.image != blank or collection.featured_image != blank -%}
+        {%- liquid
+          assign collection_image = collection.image | default: collection.featured_image
+        -%}
+        
+        {{ collection_image | image_url: width: 600 | image_tag:
+          loading: 'lazy',
+          widths: '330, 535, 750, 1000',
+          sizes: '(min-width: 1200px) calc((100vw - 10rem) / 3), (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)',
+          class: 'collection-card__image',
+          alt: collection_image.alt | default: collection.title | escape
+        }}
+      {%- else -%}
+        {{ 'collection-1' | placeholder_svg_tag: 'collection-card__placeholder' }}
+      {%- endif -%}
+      
+      <div class="collection-card__overlay"></div>
+      
+      <div class="collection-card__content">
+        <h3 class="collection-card__title">{{ collection.title }}</h3>
+        
+        {%- if show_description and collection.description != blank -%}
+          <div class="collection-card__description">
+            {{ collection.description | strip_html | truncate: 150 }}
+          </div>
+        {%- endif -%}
+        
+        {%- if show_product_count -%}
+          <span class="collection-card__count">
+            {{ 'collections.general.items_with_count' | t: count: collection.all_products_count }}
+          </span>
+        {%- endif -%}
+        
+        {%- if show_button -%}
+          <span class="collection-card__button button button--secondary">
+            {{ button_text | default: 'collections.general.view_collection' | t }}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+</div>
+
+<style>
+  .collection-card {
+    position: relative;
+    height: 100%;
+  }
+  
+  .collection-card__link {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+  }
+  
+  .collection-card__media {
+    position: relative;
+    height: 100%;
+    min-height: 300px;
+    overflow: hidden;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .collection-card__image,
+  .collection-card__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+  
+  .collection-card:hover .collection-card__image {
+    transform: scale(1.05);
+  }
+  
+  .collection-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    transition: opacity var(--transition-base);
+  }
+  
+  .collection-card:hover .collection-card__overlay {
+    opacity: 0.8;
+  }
+  
+  .collection-card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-xl);
+    color: var(--color-text-light);
+    text-align: center;
+    z-index: 1;
+  }
+  
+  .collection-card__title {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+    color: inherit;
+  }
+  
+  .collection-card__description {
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.9;
+  }
+  
+  .collection-card__count {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.8;
+  }
+  
+  .collection-card__button {
+    display: inline-block;
+    background-color: var(--color-text-light);
+    color: var(--color-text-primary);
+  }
+</style>

@@ -1,0 +1,51 @@
+{%- liquid
+  assign desktop_image = desktop_image | default: image
+  assign mobile_image = mobile_image | default: desktop_image
+  assign alt_text = alt | default: image.alt | escape
+  assign loading_val = loading | default: 'lazy'
+  
+  if section.index <= 2
+    assign loading_val = 'eager'
+  endif
+  
+  assign desktop_widths = '750, 1100, 1500, 1780, 2000, 3000, 3840'
+  assign mobile_widths = '375, 550, 750, 1100'
+-%}
+
+{%- if desktop_image != blank or mobile_image != blank -%}
+  <picture class="responsive-image{% if class %} {{ class }}{% endif %}">
+    {%- if mobile_image != blank and mobile_image != desktop_image -%}
+      <source
+        media="(max-width: 749px)"
+        srcset="{{ mobile_image | image_url: width: mobile_image.width }}"
+        width="{{ mobile_image.width }}"
+        height="{{ mobile_image.height }}"
+      >
+    {%- endif -%}
+    
+    {%- if desktop_image != blank -%}
+      <source
+        media="(min-width: 750px)"
+        srcset="{{ desktop_image | image_url: width: desktop_image.width }}"
+        width="{{ desktop_image.width }}"
+        height="{{ desktop_image.height }}"
+      >
+      
+      {{ desktop_image | image_url: width: desktop_image.width | image_tag:
+        loading: loading_val,
+        widths: desktop_widths,
+        alt: alt_text,
+        class: 'responsive-image__image'
+      }}
+    {%- elsif mobile_image != blank -%}
+      {{ mobile_image | image_url: width: mobile_image.width | image_tag:
+        loading: loading_val,
+        widths: mobile_widths,
+        alt: alt_text,
+        class: 'responsive-image__image'
+      }}
+    {%- endif -%}
+  </picture>
+{%- else -%}
+  {{ placeholder | default: 'image' | placeholder_svg_tag: class }}
+{%- endif -%}

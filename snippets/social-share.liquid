@@ -1,0 +1,99 @@
+{%- liquid
+  assign share_url = share_url | default: request.origin | append: request.path
+  assign share_title = share_title | default: page_title | url_param_escape
+  assign share_description = share_description | default: page_description | default: shop.description | truncate: 160 | url_param_escape
+  assign share_image = share_image | default: page_image
+  
+  if share_image != blank
+    assign share_image_url = share_image | image_url: width: 1200 | prepend: 'https:'
+  endif
+-%}
+
+<div class="social-share{% if class %} {{ class }}{% endif %}">
+  {%- if title -%}
+    <span class="social-share__title">{{ title }}</span>
+  {%- endif -%}
+  
+  <div class="social-share__buttons">
+    <!-- Facebook -->
+    <a 
+      href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_param_escape }}"
+      class="social-share__button social-share__button--facebook"
+      target="_blank"
+      rel="noopener"
+      aria-label="{{ 'general.social.share_on_facebook' | t }}"
+    >
+      {% render 'icon', icon: 'facebook' %}
+    </a>
+    
+    <!-- Twitter -->
+    <a 
+      href="https://twitter.com/intent/tweet?text={{ share_title }}&url={{ share_url | url_param_escape }}"
+      class="social-share__button social-share__button--twitter"
+      target="_blank"
+      rel="noopener"
+      aria-label="{{ 'general.social.share_on_twitter' | t }}"
+    >
+      {% render 'icon', icon: 'twitter' %}
+    </a>
+    
+    <!-- Pinterest -->
+    {%- if share_image_url -%}
+      <a 
+        href="https://pinterest.com/pin/create/button/?url={{ share_url | url_param_escape }}&media={{ share_image_url | url_param_escape }}&description={{ share_description }}"
+        class="social-share__button social-share__button--pinterest"
+        target="_blank"
+        rel="noopener"
+        aria-label="{{ 'general.social.share_on_pinterest' | t }}"
+      >
+        {% render 'icon', icon: 'pinterest' %}
+      </a>
+    {%- endif -%}
+    
+    <!-- Email -->
+    <a 
+      href="mailto:?subject={{ share_title }}&body={{ share_description }}%0A%0A{{ share_url | url_param_escape }}"
+      class="social-share__button social-share__button--email"
+      aria-label="{{ 'general.social.share_via_email' | t }}"
+    >
+      {% render 'icon', icon: 'email' %}
+    </a>
+    
+    <!-- Copy Link -->
+    <button
+      class="social-share__button social-share__button--copy"
+      data-share-url="{{ share_url }}"
+      aria-label="{{ 'general.social.copy_link' | t }}"
+    >
+      {% render 'icon', icon: 'link' %}
+      <span class="social-share__button-text" data-default-text="{{ 'general.social.copy_link' | t }}" data-success-text="{{ 'general.social.link_copied' | t }}">
+        {{ 'general.social.copy_link' | t }}
+      </span>
+    </button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const copyButtons = document.querySelectorAll('.social-share__button--copy');
+    
+    copyButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const url = this.dataset.shareUrl;
+        const textElement = this.querySelector('.social-share__button-text');
+        const defaultText = textElement.dataset.defaultText;
+        const successText = textElement.dataset.successText;
+        
+        navigator.clipboard.writeText(url).then(() => {
+          textElement.textContent = successText;
+          button.classList.add('social-share__button--success');
+          
+          setTimeout(() => {
+            textElement.textContent = defaultText;
+            button.classList.remove('social-share__button--success');
+          }, 2000);
+        });
+      });
+    });
+  });
+</script>

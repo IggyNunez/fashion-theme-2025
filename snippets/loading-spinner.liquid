@@ -1,0 +1,19 @@
+<div class="loading-overlay{% if modifier %} loading-overlay--{{ modifier }}{% endif %}">
+  <div class="loading-overlay__spinner">
+    <svg class="spinner" width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <circle class="spinner__track" cx="20" cy="20" r="18" stroke-width="2" fill="none" stroke="currentColor" opacity="0.25"/>
+      <circle class="spinner__indicator" cx="20" cy="20" r="18" stroke-width="2" fill="none" stroke="currentColor" stroke-dasharray="113" stroke-dashoffset="85" stroke-linecap="round">
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          from="0 20 20"
+          to="360 20 20"
+          dur="1s"
+          repeatCount="indefinite"/>
+      </circle>
+    </svg>
+    {%- if message -%}
+      <span class="loading-overlay__message">{{ message }}</span>
+    {%- endif -%}
+  </div>
+</div>

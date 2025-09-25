@@ -1,0 +1,104 @@
+{%- liquid
+  assign icon_width = icon_width | default: 20
+  assign icon_height = icon_height | default: 20
+  assign icon_class = icon_class | default: 'icon'
+-%}
+
+{%- case icon -%}
+  {%- when 'account' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M10 10C11.6569 10 13 8.65685 13 7C13 5.34315 11.6569 4 10 4C8.34315 4 7 5.34315 7 7C7 8.65685 8.34315 10 10 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 18V16C4 14.3431 5.34315 13 7 13H13C14.6569 13 16 14.3431 16 16V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'cart' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M3 3H17L16 11H4L3 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M4 11L3 3H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7" cy="16" r="1" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="14" cy="16" r="1" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+
+  {%- when 'search' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'heart' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M17.367 3.633a4.5 4.5 0 00-6.364 0L10 4.636l-1.003-1.003a4.5 4.5 0 10-6.364 6.364l7.367 7.367 7.367-7.367a4.5 4.5 0 000-6.364z" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+
+  {%- when 'close' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M14 6L6 14M6 6L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'chevron-down' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M5 7L10 12L15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'chevron-right' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M7 5L12 10L7 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'check' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M16 6L8 14L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'star' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M10 2L12.09 7.26L18 8.27L14 12.14L14.81 18L10 15.27L5.19 18L6 12.14L2 8.27L7.91 7.26L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'menu' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'filter' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M3 7H17M6 12H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'plus' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'minus' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M4 10H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'eye' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M10 4C4 4 1 10 1 10s3 6 9 6 9-6 9-6-3-6-9-6z" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+
+  {%- when 'facebook' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M18 10.0611C18 5.50451 14.4183 2 9.77778 2C5.13722 2 1.55556 5.50451 1.55556 10.0611C1.55556 14.1667 4.43889 17.5631 8.27778 18.2V12.5667H6.25556V10.0611H8.27778V8.36111C8.27778 6.39444 9.49444 5.28889 11.3 5.28889C12.1944 5.28889 13.1278 5.44444 13.1278 5.44444V7.56111H12.1056C11.1 7.56111 10.7778 8.18333 10.7778 8.82222V10.0611H13.0389L12.6722 12.5667H10.7778V18.2C14.6167 17.5631 18 14.1667 18 10.0611Z"/>
+    </svg>
+
+  {%- when 'instagram' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M10 2C12.717 2 13.056 2.01 14.122 2.06C15.187 2.11 15.912 2.277 16.55 2.525C17.21 2.779 17.766 3.123 18.322 3.678C18.8779 4.2327 19.224 4.79 19.475 5.45C19.722 6.087 19.89 6.813 19.94 7.878C19.987 8.944 20 9.283 20 12C20 14.717 19.99 15.056 19.94 16.122C19.89 17.187 19.722 17.912 19.475 18.55C19.2247 19.21 18.8779 19.7673 18.322 20.322C17.7673 20.8779 17.21 21.224 16.55 21.475C15.913 21.722 15.187 21.89 14.122 21.94C13.056 21.987 12.717 22 10 22C7.283 22 6.944 21.99 5.878 21.94C4.813 21.89 4.088 21.722 3.45 21.475C2.79 21.2247 2.23273 20.8779 1.678 20.322C1.12207 19.7673 0.775296 19.21 0.525 18.55C0.277 17.913 0.11 17.187 0.0600001 16.122C0.0129999 15.056 0 14.717 0 12C0 9.283 0.00999994 8.944 0.0600001 7.878C0.11 6.812 0.277 6.088 0.525 5.45C0.774703 4.79 1.12207 4.23273 1.678 3.678C2.23273 3.12207 2.79 2.7753 3.45 2.525C4.088 2.277 4.812 2.11 5.878 2.06C6.944 2.013 7.283 2 10 2ZM10 7C9.20435 7 8.44129 7.31607 7.87868 7.87868C7.31607 8.44129 7 9.20435 7 10C7 10.7956 7.31607 11.5587 7.87868 12.1213C8.44129 12.6839 9.20435 13 10 13C10.7956 13 11.5587 12.6839 12.1213 12.1213C12.6839 11.5587 13 10.7956 13 10C13 9.20435 12.6839 8.44129 12.1213 7.87868C11.5587 7.31607 10.7956 7 10 7ZM16.5 6.5C16.5 6.23478 16.3946 5.98043 16.2071 5.79289C16.0196 5.60536 15.7652 5.5 15.5 5.5C15.2348 5.5 14.9804 5.60536 14.7929 5.79289C14.6054 5.98043 14.5 6.23478 14.5 6.5C14.5 6.76522 14.6054 7.01957 14.7929 7.20711C14.9804 7.39464 15.2348 7.5 15.5 7.5C15.7652 7.5 16.0196 7.39464 16.2071 7.20711C16.3946 7.01957 16.5 6.76522 16.5 6.5Z"/>
+    </svg>
+
+  {%- when 'twitter' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M15.751 2H18.817L12.541 9.125L19.926 18H14.107L9.599 12.451L4.424 18H1.356L8.073 10.394L1 2H6.961L11.027 7.081L15.751 2ZM14.914 16.302H16.533L6.083 3.603H4.347L14.914 16.302Z"/>
+    </svg>
+
+  {%- when 'youtube' -%}
+    <svg class="{{ icon_class }}" width="{{ icon_width }}" height="{{ icon_height }}" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M19.582 4.831C19.351 3.984 18.673 3.318 17.808 3.093C16.254 2.666 10 2.666 10 2.666C10 2.666 3.746 2.666 2.192 3.093C1.327 3.318 0.649 3.984 0.418 4.831C0 6.357 0 9.533 0 9.533C0 9.533 0 12.709 0.418 14.235C0.649 15.082 1.327 15.715 2.192 15.94C3.746 16.367 10 16.367 10 16.367C10 16.367 16.254 16.367 17.808 15.94C18.673 15.715 19.351 15.082 19.582 14.235C20 12.709 20 9.533 20 9.533C20 9.533 20 6.357 19.582 4.831ZM7.955 12.303V6.763L13.182 9.533L7.955 12.303Z"/>
+    </svg>
+
+{%- endcase -%}
