@@ -1,0 +1,13 @@
+# Ignore theme customization files during development
+config/settings_data.json
+
+# Ignore template customization during push
+templates/*.json
+
+# Keep development files local
+.shopify
+.env
+
+# Ignore build artifacts
+dist/
+*.zip

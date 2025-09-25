@@ -1,0 +1,39 @@
+# Theme editor sync
+config/settings_data.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Build outputs
+*.zip
+*.log
+
+# Local development
+.shopify/
+.theme-check/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+
+# Git merge files
+*.orig
+
+# Backup files
+*.backup
+*.bak

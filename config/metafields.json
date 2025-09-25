@@ -1,0 +1,212 @@
+{
+  "product_metafields": [
+    {
+      "namespace": "custom",
+      "key": "fabric_composition",
+      "name": "Fabric Composition",
+      "description": "Material composition of the product",
+      "type": "multi_line_text_field",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "care_instructions",
+      "name": "Care Instructions",
+      "description": "How to care for this product",
+      "type": "multi_line_text_field",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "fit_type",
+      "name": "Fit Type",
+      "description": "How this product fits",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"Slim Fit\", \"Regular Fit\", \"Relaxed Fit\", \"Oversized\", \"Athletic Fit\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "sustainability_rating",
+      "name": "Sustainability Rating",
+      "description": "Eco-friendly rating from 1-5",
+      "type": "number_integer",
+      "validations": [
+        {
+          "name": "min",
+          "value": "1"
+        },
+        {
+          "name": "max",
+          "value": "5"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "size_chart",
+      "name": "Size Chart",
+      "description": "Size guide for this product",
+      "type": "file_reference",
+      "validations": [
+        {
+          "name": "file_type_options",
+          "value": "[\"image/png\", \"image/jpeg\", \"application/pdf\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "product_type",
+      "name": "Product Category Type",
+      "description": "Used for bundle detection",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"top\", \"bottom\", \"accessory\", \"footwear\", \"outerwear\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "model_measurements",
+      "name": "Model Measurements",
+      "description": "Model size and measurements",
+      "type": "json",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "color_family",
+      "name": "Color Family",
+      "description": "Primary color category",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"Black\", \"White\", \"Grey\", \"Navy\", \"Blue\", \"Red\", \"Pink\", \"Green\", \"Yellow\", \"Orange\", \"Purple\", \"Brown\", \"Beige\", \"Multi\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "season",
+      "name": "Season",
+      "description": "Seasonal collection",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"Spring\", \"Summer\", \"Fall\", \"Winter\", \"All Season\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "style_tags",
+      "name": "Style Tags",
+      "description": "Style categories for AI recommendations",
+      "type": "list.single_line_text_field",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "gender",
+      "name": "Gender",
+      "description": "Target gender for product",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"Men\", \"Women\", \"Unisex\", \"Kids\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "occasions",
+      "name": "Occasions",
+      "description": "Suitable occasions for wearing",
+      "type": "list.single_line_text_field",
+      "validations": []
+    }
+  ],
+  "customer_metafields": [
+    {
+      "namespace": "custom",
+      "key": "vip_tier",
+      "name": "VIP Tier",
+      "description": "Customer loyalty tier",
+      "type": "single_line_text_field",
+      "validations": [
+        {
+          "name": "choices",
+          "value": "[\"bronze\", \"silver\", \"gold\", \"platinum\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "custom",
+      "key": "style_preferences",
+      "name": "Style Preferences",
+      "description": "Customer style preferences for AI recommendations",
+      "type": "json",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "size_profile",
+      "name": "Size Profile",
+      "description": "Customer's typical sizes",
+      "type": "json",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "wishlist",
+      "name": "Wishlist",
+      "description": "Customer wishlist product IDs",
+      "type": "list.product_reference",
+      "validations": []
+    },
+    {
+      "namespace": "custom",
+      "key": "birthday",
+      "name": "Birthday",
+      "description": "Customer birthday for special offers",
+      "type": "date",
+      "validations": []
+    }
+  ],
+  "shop_metafields": [
+    {
+      "namespace": "fashion_theme",
+      "key": "trending_searches",
+      "name": "Trending Searches",
+      "description": "Current trending search terms",
+      "type": "json",
+      "validations": []
+    },
+    {
+      "namespace": "fashion_theme",
+      "key": "size_guide_default",
+      "name": "Default Size Guide",
+      "description": "Default size chart for products",
+      "type": "file_reference",
+      "validations": []
+    },
+    {
+      "namespace": "fashion_theme",
+      "key": "instagram_feed",
+      "name": "Instagram Feed Token",
+      "description": "Instagram API token for social feed",
+      "type": "single_line_text_field",
+      "validations": []
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+[environments.development]
+store = "dev-store.myshopify.com"
+theme_id = "123456789"
+
+[environments.staging]  
+store = "staging-store.myshopify.com"
+theme_id = "987654321"
+
+[environments.production]
+store = "production-store.myshopify.com"
+theme_id = "555666777"
+
+[environments.qa]
+store = "qa-store.myshopify.com"
+theme_id = "111222333"

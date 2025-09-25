@@ -1,0 +1,157 @@
+<section class="product-variant-picker" data-section="{{ section.id }}">
+  <div class="product-form__input product-form__input--dropdown">
+    {%- for option in product.options_with_values -%}
+      <div class="product-form__option" data-option-index="{{ forloop.index0 }}">
+        <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+          {{ option.name }}
+        </label>
+        
+        {%- if option.name == 'Color' or option.name == 'Colour' -%}
+          <div class="color-swatch-list" role="group" aria-label="{{ option.name }}">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign option_disabled = false
+                for variant in product.variants
+                  if variant.options[forloop.index0] == value
+                    unless variant.available
+                      assign option_disabled = true
+                    endunless
+                  endif
+                endfor
+              -%}
+              
+              <input
+                type="radio"
+                id="color-{{ section.id }}-{{ value | handle }}"
+                name="options[{{ option.name | escape }}]"
+                value="{{ value | escape }}"
+                class="color-swatch-input visually-hidden"
+                {% if option.selected_value == value %}checked{% endif %}
+                {% if option_disabled %}disabled{% endif %}
+                data-option-value
+              >
+              <label
+                for="color-{{ section.id }}-{{ value | handle }}"
+                class="color-swatch"
+                style="--swatch-color: {{ value | handle | replace: '-', '' }};"
+                data-color="{{ value | escape }}"
+                data-variant-id="{{ variant.id }}"
+              >
+                <span class="visually-hidden">{{ value }}</span>
+                <span class="swatch-color" 
+                      style="background-color: {{ value | handle | replace: '-', '' }}; 
+                             background-image: url('{{ value | handle | append: '.png' | asset_url }}');">
+                </span>
+                {%- if option_disabled -%}
+                  <span class="swatch-unavailable">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                    </svg>
+                  </span>
+                {%- endif -%}
+              </label>
+            {%- endfor -%}
+          </div>
+          
+        {%- elsif option.name == 'Size' -%}
+          <div class="size-selector-list" role="group" aria-label="{{ option.name }}">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign option_disabled = false
+                for variant in product.variants
+                  if variant.options[forloop.index0] == value
+                    unless variant.available
+                      assign option_disabled = true
+                    endunless
+                  endif
+                endfor
+              -%}
+              
+              <input
+                type="radio"
+                id="size-{{ section.id }}-{{ value | handle }}"
+                name="options[{{ option.name | escape }}]"
+                value="{{ value | escape }}"
+                class="size-selector-input visually-hidden"
+                {% if option.selected_value == value %}checked{% endif %}
+                {% if option_disabled %}disabled{% endif %}
+                data-option-value
+              >
+              <label
+                for="size-{{ section.id }}-{{ value | handle }}"
+                class="size-selector-label"
+                data-size="{{ value | escape }}"
+                {% if option_disabled %}data-unavailable="true"{% endif %}
+              >
+                {{ value }}
+              </label>
+            {%- endfor -%}
+            
+            {%- if settings.enable_size_chart -%}
+              <button type="button" class="size-chart-trigger link" data-modal-trigger="size-chart">
+                {% render 'icon-ruler' %}
+                <span>Size Guide</span>
+              </button>
+            {%- endif -%}
+          </div>
+          
+        {%- else -%}
+          <select
+            id="Option-{{ section.id }}-{{ forloop.index0 }}"
+            class="select select--variant"
+            name="options[{{ option.name | escape }}]"
+            data-option-selector
+          >
+            {%- for value in option.values -%}
+              <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>
+                {{ value }}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+    
+    <script type="application/json" data-variant-json>
+      {{ product.variants | json }}
+    </script>
+    
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Variant Picker",
+  "class": "product-variant-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Variant Display"
+    },
+    {
+      "type": "select",
+      "id": "picker_type",
+      "label": "Variant picker type",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        },
+        {
+          "value": "button",
+          "label": "Button"
+        }
+      ],
+      "default": "button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Variant Picker"
+    }
+  ]
+}
+{% endschema %}

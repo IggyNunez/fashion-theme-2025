@@ -1,0 +1,24 @@
+{
+  "name": "fashion-theme-2025",
+  "version": "1.0.0",
+  "description": "High-performance fashion/apparel Shopify theme with OS 2.0",
+  "author": "Your Team",
+  "license": "MIT",
+  "scripts": {
+    "dev": "shopify theme dev --theme-editor-sync",
+    "build": "shopify theme check && shopify theme package",
+    "push": "shopify theme push",
+    "push:live": "shopify theme push --live --allow-live",
+    "pull": "shopify theme pull",
+    "check": "shopify theme check --fail-level=error",
+    "share": "shopify theme share",
+    "deploy:staging": "shopify theme push --theme staging",
+    "deploy:production": "npm run check && shopify theme push --live --allow-live"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.84.2",
+    "@shopify/theme-check": "^2.0.0",
+    "prettier": "^3.0.0",
+    "eslint": "^8.50.0"
+  }
+}

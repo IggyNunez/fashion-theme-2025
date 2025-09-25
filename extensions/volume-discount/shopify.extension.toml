@@ -1,0 +1,44 @@
+name = "volume-discount"
+type = "product_discounts"
+api_version = "2024-10"
+
+[build]
+command = "npm run build"
+path = "dist/index.js"
+
+[build.environment]
+NODE_ENV = "production"
+
+[configuration]
+name = "Volume Discount Configuration"
+description = "Configure tiered discounts based on quantity purchased"
+
+[[configuration.fields]]
+key = "discountMessage"
+name = "Discount Message"
+description = "Message shown to customers"
+type = "single_line_text"
+required = true
+
+[[configuration.fields]]
+key = "minimumQuantity"
+name = "Minimum Quantity"
+description = "Minimum items to trigger discount"
+type = "number_integer"
+required = true
+default = 2
+
+[[configuration.fields]]
+key = "discountPercentage"
+name = "Discount Percentage"
+description = "Percentage off for volume purchases"
+type = "number_decimal"
+required = true
+default = 10.0
+
+[[configuration.fields]]
+key = "stackWithOtherDiscounts"
+name = "Stack with other discounts"
+description = "Allow combining with other discounts"
+type = "boolean"
+default = false

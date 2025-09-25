@@ -1,0 +1,38 @@
+name = "fashion-theme-2025"
+scopes = "read_products,write_products,read_themes,write_themes,read_customers,write_customers,read_orders,write_orders,read_discounts,write_discounts"
+
+[app_extensions]
+include = ["extensions/*"]
+
+[auth]
+redirect_urls = [
+  "https://your-app-domain.com/api/auth/callback",
+  "https://localhost:3000/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
+
+[[webhooks.subscriptions]]
+topics = ["orders/create", "orders/updated", "orders/cancelled"]
+uri = "/api/webhooks/orders"
+
+[[webhooks.subscriptions]]
+topics = ["products/create", "products/update", "products/delete"]
+uri = "/api/webhooks/products"
+
+[[webhooks.subscriptions]]
+topics = ["customers/create", "customers/update"]
+uri = "/api/webhooks/customers"
+
+[[webhooks.subscriptions]]
+topics = ["carts/create", "carts/update"]
+uri = "/api/webhooks/carts"
+
+[app_proxy]
+subpath = "tools"
+prefix = "apps"
+url = "https://your-app-domain.com/api/proxy"
+
+[pos]
+embedded = false

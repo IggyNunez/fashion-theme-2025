@@ -1,0 +1,94 @@
+name: Shopify Theme CI/CD
+
+on:
+  push:
+    branches: [main, develop, 'feature/**']
+  pull_request:
+    branches: [main, develop]
+
+env:
+  SHOPIFY_CLI_VERSION: '3.84.2'
+  NODE_VERSION: '18'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Theme Validation
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@${{ env.SHOPIFY_CLI_VERSION }}
+      
+      - name: Theme Check
+        run: shopify theme check --fail-level=error
+      
+      - name: Run Lighthouse CI
+        if: github.event_name == 'pull_request'
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun --config=./lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  deploy-staging:
+    needs: validate
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    name: Deploy to Staging
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@${{ env.SHOPIFY_CLI_VERSION }}
+      
+      - name: Deploy to Staging Theme
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+          SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_STAGING_STORE }}
+          SHOPIFY_STAGING_THEME_ID: ${{ secrets.STAGING_THEME_ID }}
+        run: |
+          shopify theme push \
+            --theme $SHOPIFY_STAGING_THEME_ID \
+            --only "assets/**/*.{css,js}" \
+            --only "config/settings_schema.json" \
+            --only "layout/**/*.liquid" \
+            --only "locales/**/*.json" \
+            --only "sections/**/*.liquid" \
+            --only "snippets/**/*.liquid" \
+            --only "templates/**/*.{json,liquid}"
+
+  deploy-production:
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    environment: production
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Production
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+          SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_PRODUCTION_STORE }}
+        run: |
+          npm install -g @shopify/cli@${{ env.SHOPIFY_CLI_VERSION }}
+          shopify theme push \
+            --live \
+            --allow-live \
+            --force \
+            --ignored-file=config/settings_data.json
