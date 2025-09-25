@@ -1,0 +1,31 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Free shipping on orders over $100",
+        "link": "",
+        "color_scheme": "accent"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "center",
+        "menu": "main-menu",
+        "show_search": true,
+        "show_cart": true,
+        "show_account": true,
+        "enable_sticky": true,
+        "transparent_home": true,
+        "color_scheme": "background-1"
+      }
+    }
+  },
+  "order": [
+    "announcement_bar",
+    "header"
+  ]
+}

@@ -9,63 +9,148 @@
       "settings": {}
     },
     "hero": {
-      "type": "slideshow",
+      "type": "hero-advanced",
       "blocks": {
-        "slide-1": {
-          "type": "slide",
+        "heading": {
+          "type": "heading",
           "settings": {
-            "heading": "Welcome to Fashion Theme 2025",
-            "heading_size": "h1",
-            "subheading": "Discover the latest trends",
-            "button_label": "Shop Now",
-            "button_link": "/collections/all",
-            "button_style_secondary": false,
-            "text_alignment": "center",
-            "image_overlay_opacity": 30,
-            "color_scheme": "inverse"
+            "heading": "Summer Collection 2025",
+            "heading_tag": "h1",
+            "heading_size": "extra-large",
+            "text_color": "#FFFFFF"
           }
         },
-        "slide-2": {
-          "type": "slide",
+        "subheading": {
+          "type": "subheading",
           "settings": {
-            "heading": "New Collection",
-            "heading_size": "h1",
-            "subheading": "Premium quality, modern design",
-            "button_label": "Explore",
-            "button_link": "/collections",
-            "button_style_secondary": true,
-            "text_alignment": "center",
-            "image_overlay_opacity": 40,
-            "color_scheme": "inverse"
+            "text": "Discover timeless elegance and modern fashion",
+            "font_size": 1.4,
+            "text_color": "#FFFFFF"
+          }
+        },
+        "spacer": {
+          "type": "spacer",
+          "settings": {
+            "height": 32
+          }
+        },
+        "buttons": {
+          "type": "button_group",
+          "settings": {
+            "button_label_1": "Shop Now",
+            "button_link_1": "/collections/all",
+            "button_style_1": "primary",
+            "button_label_2": "View Lookbook",
+            "button_link_2": "/pages/lookbook",
+            "button_style_2": "outline"
           }
         }
       },
       "block_order": [
-        "slide-1",
-        "slide-2"
+        "heading",
+        "subheading",
+        "spacer",
+        "buttons"
       ],
       "settings": {
-        "layout": "full_width",
-        "slide_height": "large",
-        "slider_visual": "dots",
-        "auto_rotate": true,
-        "change_slides_speed": 5
+        "section_height": "large",
+        "content_position": "middle-center",
+        "content_alignment": "center",
+        "enable_overlay": true,
+        "overlay_opacity": 40,
+        "color_scheme": "inverse"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "featured_products": {
+      "type": "product-grid-advanced",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Trending Now",
+            "subheading": "Shop our most popular items this season"
+          }
+        },
+        "view_all": {
+          "type": "view_all",
+          "settings": {
+            "label": "View all products"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "view_all"
+      ],
       "settings": {
-        "title": "Featured Products",
-        "collection": "",
-        "products_to_show": 4,
+        "collection": "all",
+        "products_limit": 8,
         "columns_desktop": 4,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": true,
+        "columns_mobile": "2",
+        "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": true,
-        "show_secondary_image": true
+        "show_color_swatches": true,
+        "show_badges": true,
+        "show_quick_add": true,
+        "show_quick_actions": true,
+        "enable_quick_view": true,
+        "enable_wishlist": true
+      }
+    },
+    "media_with_content_1": {
+      "type": "media-with-content",
+      "blocks": {
+        "caption": {
+          "type": "caption",
+          "settings": {
+            "caption": "SUSTAINABLE FASHION",
+            "caption_size": 0.9
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Crafted with Care",
+            "heading_tag": "h2",
+            "heading_size": 2.8
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our commitment to sustainability goes beyond materials. Every piece is designed to last, reducing waste and celebrating timeless style over fast fashion.</p>"
+          }
+        },
+        "features": {
+          "type": "features",
+          "settings": {
+            "feature_1": "100% Organic Materials",
+            "feature_2": "Ethically Sourced",
+            "feature_3": "Carbon Neutral Shipping",
+            "feature_4": "Lifetime Warranty"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_label": "Learn About Our Process",
+            "button_link": "/pages/sustainability",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "caption",
+        "heading",
+        "text",
+        "features",
+        "button"
+      ],
+      "settings": {
+        "media_position": "right",
+        "content_alignment": "left",
+        "section_width": "page-width"
       }
     },
     "collection_list": {
@@ -97,13 +182,92 @@
       ],
       "settings": {
         "title": "Shop by Category",
-        "subtitle": "Browse our collections",
+        "subtitle": "Find your perfect style",
         "columns_desktop": "3",
         "columns_mobile": "1",
         "show_description": false,
         "show_product_count": true,
         "show_view_all": true,
         "show_overlay": true
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>\"The quality is exceptional! I've never felt more confident in my wardrobe choices.\"</p>",
+            "author_name": "Sarah Johnson",
+            "author_title": "Fashion Blogger",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>\"Sustainable fashion that doesn't compromise on style. Absolutely love it!\"</p>",
+            "author_name": "Mike Chen",
+            "author_title": "Verified Customer",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>\"Fast shipping, beautiful packaging, and incredible customer service.\"</p>",
+            "author_name": "Emma Wilson",
+            "author_title": "Loyal Customer",
+            "show_rating": true,
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ],
+      "settings": {
+        "title": "What Our Customers Say",
+        "subtitle": "Join thousands of satisfied customers",
+        "columns_desktop": "3",
+        "columns_mobile": "1",
+        "enable_slider": true,
+        "auto_rotate": true,
+        "change_slides_speed": 5
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Get 10% Off Your First Order",
+            "heading_size": "h2"
+          }
+        },
+        "paragraph": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Subscribe to receive exclusive offers, early access to new products, and style tips.</p>"
+          }
+        },
+        "email_form": {
+          "type": "email_form"
+        }
+      },
+      "block_order": [
+        "heading",
+        "paragraph",
+        "email_form"
+      ],
+      "settings": {
+        "background_style": "primary",
+        "full_width": true
       }
     },
     "footer": {
@@ -115,8 +279,11 @@
     "announcement",
     "header",
     "hero",
-    "featured_collection",
+    "featured_products",
+    "media_with_content_1",
     "collection_list",
+    "testimonials",
+    "newsletter",
     "footer"
   ]
 }
